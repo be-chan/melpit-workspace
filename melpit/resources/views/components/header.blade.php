@@ -5,6 +5,27 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
+                <form class="form-inline" method="GET" action="{{ route('top') }}">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <select class="custom-select" name="category">
+                                <option value="">全て</option>
+                                @foreach ($categories as $category)
+                                <option value="primary:{{$category->id}}" class="font-weight-bold" {{ $defaults['category'] == "primary:" . $category->id ? 'selected' : ''}}>{{$category->name}}</option>
+                                    @foreach ($category->secondaryCategories as $secondary)
+                                    <option value="secondary:{{$secondary->id}}" {{ $defaults['category'] == "secondary:" . $secondary->id ? 'selected' : ''}}>{{$secondary->name}}</option>
+                                    @endforeach
+                                @endforeach
+                            </select>
+                        </div>
+                        <input type="text" name="keyword" class="form-control" value="{{$defaults['keyword']}}" aria-label="Text input with dropdown button" placeholder="キーワード検索">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-outline-dark">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
                 @guest
                     {{-- 非ログイン --}}
                     <li class="nav-item">
@@ -30,6 +51,9 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('sell') }}">
                                 <i class="fas fa-camera text-left" style="width: 30px"></i>商品を出品する
+                            </a>
+                            <a class="dropdown-item" href="{{ route('mypage.sold-items') }}">
+                                <i class="fas fa-store-alt text-left" style="width: 30px"></i>出品した商品
                             </a>
                             <a class="dropdown-item" href="{{ route('mypage.edit-profile') }}">
                                 <i class="far fa-address-card text-left" style="width: 30px"></i>プロフィール編集
